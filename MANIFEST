@@ -1,0 +1,11 @@
+Changes
+MANIFEST
+Makefile.PL
+Ptrace.xs
+README
+lib/FreeBSD/i386/Ptrace.pm
+t/FreeBSD-i386-Ptrace.t
+t/nofork.pl
+t/pstrace.pl
+t/rperl.pl
+META.yml                                 Module meta-data (added by MakeMaker)

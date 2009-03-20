@@ -1,10 +1,14 @@
 # Revision history for FreeBSD-i386-Ptrace
 #
-# $Id: Changes,v 0.1 2009/03/14 12:45:27 dankogai Exp dankogai $
+# $Id: Changes,v 0.2 2009/03/20 14:03:28 dankogai Exp $
 #
 # Revision history for Revision history for URI-Escape-XS
 #
-$Revision: 0.1 $ $Date: 2009/03/14 12:45:27 $
+$Revision: 0.2 $ $Date: 2009/03/20 14:03:28 $
+! *
+	Lots of enhancements.
+
+0.01  2009/03/14 12:45:27
 + *
         First release.
 

@@ -1,6 +1,6 @@
 #!perl
 #
-# $Id: Makefile.PL,v 0.1 2009/03/14 12:45:27 dankogai Exp dankogai $
+# $Id: Makefile.PL,v 0.1 2009/03/14 12:45:27 dankogai Exp $
 #
 use 5.008001;
 use strict;

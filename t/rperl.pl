@@ -1,15 +1,22 @@
 #!/usr/local/bin/perl
 #
-# $Id: rperl.pl,v 0.1 2009/03/14 12:45:27 dankogai Exp dankogai $
+# $Id: rperl.pl,v 0.3 2009/03/20 14:03:28 dankogai Exp $
 #
 use strict;
 use warnings;
 use FreeBSD::i386::Ptrace;
 use FreeBSD::i386::Ptrace::Syscall;
 use File::Temp;
+use BSD::Resource;
+setrlimit( RLIMIT_CPU,   1, 1 );
+setrlimit( RLIMIT_CORE,  0, 0 );
 
 our $DEBUG = 0;
-my %banned = map { $_ => 1 } qw/fork vfork rfork bind listen accept/;
+my @banned = qw{
+ptrace fork vfork rfork bind listen accept
+sleep nanosleep
+};
+my %banned = map { $_ => 1 } @banned;
 my $timeout = 1;
 
 my $src    = slurp();
@@ -40,29 +47,22 @@ else {                # mother
         local $SIG{ALRM} = sub { die "timed out\n" };    # NB: \n required
         alarm $timeout;
         my $count = 0;    # odd on enter, even on leave
-        while ( pt_syscall($pid) == 0 ) {
+	while ( pt_to_sce($pid) == 0 ) {
             last if wait == -1;
-            next unless ++$count & 1;    # enter only
             my $call = pt_getcall($pid);
-            warn $SYS{$call} if $DEBUG;
-            next if !$banned{ $SYS{$call} };
-            pt_kill($pid);
-            print "# $pid killed: SYS_$SYS{$call} banned.\n";
-            last;
+	    my $name = $SYS{$call} || 'unknown';
+            next if !$banned{ $name };
+	    #pt_kill($pid);
+	    ptrace(PT_CONTINUE, $pid, 0, 9);
+	    die "SYS_$SYS{$call} banned.\n";
         }
         alarm 0;
     };
     if ($@) {
-        pt_kill($pid);
         print "# $pid killed: $@";
     }
-    #close $coh;
-    #close $ceh;
-    #unlink $csrcfn;
     my $cout = slurp($coh->filename);
-    #unlink $coutfn;
     my $cerr = slurp($ceh->filename);
-    #unlink $cerrfn;
     print "# stdout\n", $cout, "\n", "# stderr\n", $cerr, "\n";
 }
 

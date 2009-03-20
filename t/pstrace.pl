@@ -7,24 +7,22 @@ use FreeBSD::i386::Ptrace::Syscall;
 die "$0 prog args ..." unless @ARGV;
 my $pid = fork();
 die "fork failed:$!" if !defined($pid);
-if ($pid == 0){
+if ( $pid == 0 ) {    # son
     pt_trace_me;
     exec @ARGV;
-}else{
-    wait; # for exec;
+}
+else {                # mom
+    wait;             # for exec;
     my $count = 0;
-    my ($call, $retval);
-   # note ptrace(PT_SYSCALL) traps both enter and leave; enter first
-    while(pt_syscall($pid) == 0){ 
-	last if wait == -1;
-	if (++$count & 1){
-	    $call = pt_getcall($pid);
-	}else{
-	    $retval = pt_getcall($pid);
-	    my $name = $SYS{$call} || 'unknown';
-	    warn "$name -> $retval";
-
-        }
+    while ( pt_to_sce($pid) == 0 ) {
+        last if wait == -1;
+        my $call = pt_getcall($pid);
+        pt_to_scx($pid);
+        wait;
+        my $retval = pt_getcall($pid);
+        my $name = $SYS{$call} || 'unknown';
+        print "$name() = $retval\n";
+        $count++;
     }
-    warn $count/2," system calls issued";
+    warn "$count system calls issued\n";
 }

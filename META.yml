@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               FreeBSD-i386-Ptrace
-version:            0.01
+version:            0.02
 abstract:           Ptrace for FreeBSD-i386
 author:
     - Dan Kogai <dankogai@dan.co.jp>

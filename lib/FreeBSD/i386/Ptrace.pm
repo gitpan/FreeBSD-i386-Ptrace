@@ -1,11 +1,11 @@
 #
-# $Id: Ptrace.pm,v 0.2 2009/03/20 14:03:28 dankogai Exp $
+# $Id: Ptrace.pm,v 0.3 2009/03/20 22:42:20 dankogai Exp dankogai $
 #
 package FreeBSD::i386::Ptrace;
 use 5.008001;
 use strict;
 use warnings;
-our $VERSION = sprintf "%d.%02d", q$Revision: 0.2 $ =~ /(\d+)/g;
+our $VERSION = sprintf "%d.%02d", q$Revision: 0.3 $ =~ /(\d+)/g;
 require Exporter;
 our @ISA = qw/Exporter/;
 
@@ -134,24 +134,6 @@ sub pt_setregs{ xs_setregs($_[0], @{$_[1]}) };
 sub pt_getcall($) { xs_getcall($_[0]) }
 sub pt_setcall($$){ xs_setcall($_[0], $_[1]) }
 
-=for comment
-
-sub pt_getcall{
-    my $pid = shift;
-    my $regs = pt_getregs($pid);
-    my $call = $regs->eax;
-    return $call unless wantarray;
-    my @args;
-    push @args, ptrace(PT_READ_D, $pid, $regs->esp + 4,  0);
-    push @args, ptrace(PT_READ_D, $pid, $regs->esp + 8,  0);
-    push @args, ptrace(PT_READ_D, $pid, $regs->esp + 10, 0);
-    push @args, ptrace(PT_READ_D, $pid, $regs->esp + 12, 0);
-    # warn xs_peekstr($pid, $args[0]) if $call == 5;
-    ($call, @args);
-}
-
-=cut
-
 sub pt_peekstr{
     my ($pid, $addr) = @_;
     my $str = '';
@@ -191,7 +173,7 @@ FreeBSD::i386::Ptrace - Ptrace for FreeBSD-i386
 
 =head1 VERSION
 
-$Id: Ptrace.pm,v 0.2 2009/03/20 14:03:28 dankogai Exp $
+$Id: Ptrace.pm,v 0.3 2009/03/20 22:42:20 dankogai Exp dankogai $
 
 =head1 SYNOPSIS
 

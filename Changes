@@ -1,10 +1,14 @@
 # Revision history for FreeBSD-i386-Ptrace
 #
-# $Id: Changes,v 0.2 2009/03/20 14:03:28 dankogai Exp $
+# $Id: Changes,v 0.3 2009/03/20 22:42:20 dankogai Exp dankogai $
 #
 # Revision history for Revision history for URI-Escape-XS
 #
-$Revision: 0.2 $ $Date: 2009/03/20 14:03:28 $
+$Revision: 0.3 $ $Date: 2009/03/20 22:42:20 $
+! lib/FreeBSD/i386/Ptrace.pm
+  POD fixes.
+
+0.02 2009/03/20 14:03:28
 ! *
 	Lots of enhancements.
 
